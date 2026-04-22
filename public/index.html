@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mystery story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- HOME -->
+      <section id="screen-home" class="screen active">
+        <div class="center-content">
+          <h1 class="logo">mystery story</h1>
+          <p class="subtitle">two stories unfold, one sentence at a time</p>
+          <div class="home-actions">
+            <div class="input-group">
+              <input
+                id="name-input"
+                type="text"
+                placeholder="your name"
+                maxlength="16"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <button id="btn-create" class="btn btn-primary">create lobby</button>
+            <div class="divider"><span>or</span></div>
+            <div class="join-row">
+              <input
+                id="code-input"
+                type="text"
+                placeholder="CODE"
+                maxlength="4"
+                autocomplete="off"
+                spellcheck="false"
+                style="text-transform: uppercase"
+              />
+              <button id="btn-join" class="btn btn-secondary">join</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOBBY -->
+      <section id="screen-lobby" class="screen">
+        <div class="center-content">
+          <p class="label">lobby code</p>
+          <h1 id="lobby-code" class="lobby-code"></h1>
+          <p class="hint">share this code with your partner</p>
+
+          <div id="lobby-players" class="player-list"></div>
+
+          <div class="sentence-select">
+            <p class="label">rounds</p>
+            <div class="sentence-options" id="sentence-options"></div>
+          </div>
+
+          <button id="btn-ready" class="btn btn-primary">ready</button>
+        </div>
+      </section>
+
+      <!-- GAME -->
+      <section id="screen-game" class="screen">
+        <div class="game-container">
+          <div class="game-header">
+            <div id="round-indicator" class="round-indicator"></div>
+            <div id="progress-bar" class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div id="context-area" class="context-area">
+            <p class="label" id="context-label">continuing <span id="context-owner"></span>'s story</p>
+            <p id="context-sentence" class="context-sentence"></p>
+            <p id="context-empty" class="context-empty">start your story</p>
+          </div>
+
+          <div id="game-input-area" class="game-input-area">
+            <div id="typing-indicator" class="typing-indicator hidden">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="input-row">
+              <input
+                id="sentence-input"
+                type="text"
+                placeholder="write your sentence..."
+                autocomplete="off"
+                spellcheck="true"
+              />
+              <button id="btn-submit" class="btn btn-primary btn-small">
+                submit
+              </button>
+            </div>
+            <p id="input-hint" class="hint"></p>
+          </div>
+
+          <div id="submitted-area" class="submitted-area hidden">
+            <p class="submitted-text">submitted</p>
+            <p class="hint">waiting for your partner to finish their sentence</p>
+            <div class="typing-indicator">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINISH -->
+      <section id="screen-finish" class="screen">
+        <div class="center-content">
+          <h2 class="finish-title">the stories</h2>
+          <div id="final-stories" class="final-stories"></div>
+          <div class="finish-actions">
+            <button id="btn-copy" class="btn btn-secondary">copy both stories</button>
+            <button id="btn-again" class="btn btn-primary">play again</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DISCONNECTED -->
+      <div id="disconnect-overlay" class="overlay hidden">
+        <div class="overlay-content">
+          <h2>partner disconnected</h2>
+          <p>they left the game</p>
+          <button id="btn-home" class="btn btn-primary">back to home</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

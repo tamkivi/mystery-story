@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -e
+
+PORT=3000
+DOMAIN_FILE="$(dirname "$0")/../.ngrok-domain"
+
+# Kill leftover processes on exit
+cleanup() {
+    kill $SERVER_PID $NGROK_PID 2>/dev/null
+    wait $SERVER_PID $NGROK_PID 2>/dev/null
+}
+trap cleanup EXIT INT TERM
+
+# Start server
+node server.js &
+SERVER_PID=$!
+
+# Wait for server
+for i in $(seq 1 10); do
+    curl -s "http://localhost:$PORT" > /dev/null 2>&1 && break
+    sleep 0.5
+done
+
+# Start ngrok
+NGROK_ARGS="http $PORT --log=stdout --log-format=logfmt"
+
+if [ -f "$DOMAIN_FILE" ]; then
+    DOMAIN=$(cat "$DOMAIN_FILE")
+    NGROK_ARGS="$NGROK_ARGS --domain=$DOMAIN"
+    echo "using static domain: $DOMAIN"
+fi
+
+ngrok $NGROK_ARGS > /dev/null &
+NGROK_PID=$!
+
+# Wait for ngrok tunnel
+sleep 2
+
+# Get public URL
+URL=$(curl -s http://127.0.0.1:4040/api/tunnels | python3 -c "import sys,json; print(json.load(sys.stdin)['tunnels'][0]['public_url'])" 2>/dev/null)
+
+echo ""
+echo "  mystery story is live"
+echo "  $URL"
+echo ""
+echo "  press Ctrl+C to stop"
+echo ""
+
+# Keep running
+wait
